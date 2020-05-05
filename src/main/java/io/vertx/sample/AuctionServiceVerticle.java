@@ -3,6 +3,10 @@ package io.vertx.sample;
 import io.vertx.core.AbstractVerticle;
 import io.vertx.core.logging.Logger;
 import io.vertx.core.logging.LoggerFactory;
+import io.vertx.ext.web.Router;
+import io.vertx.ext.web.handler.BodyHandler;
+import io.vertx.ext.web.handler.ErrorHandler;
+import io.vertx.ext.web.handler.StaticHandler;
 import io.vertx.ext.web.handler.sockjs.PermittedOptions;
 import io.vertx.ext.web.handler.sockjs.BridgeEventType;
 import io.vertx.ext.web.handler.sockjs.BridgeOptions;
@@ -14,7 +18,14 @@ public class AuctionServiceVerticle extends AbstractVerticle {
 
     @Override
     public void start() {
+        Router router = Router.router(vertx);
 
+        router.route("/eventbus/*").handler(eventBusHandler());
+        router.mountSubRouter("/api", auctionApiRouter());
+        router.route().failureHandler(errorHandler());
+        router.route().handler(staticHandler());
+
+        vertx.createHttpServer().requestHandler(router::accept).listen(8080);
     }
 
     private SockJSHandler eventBusHandler() {
@@ -24,8 +35,35 @@ public class AuctionServiceVerticle extends AbstractVerticle {
             if(event.type() == BridgeEventType.SOCKET_CREATED) {
                 logger.info("A socket was created.");
             }
-            event.complete();
+            event.complete(true);
         });
+    }
+
+    private Router auctionApiRouter() {
+        AuctionRepository repository = new AuctionRepository(vertx.sharedData());
+        AuctionValidator validator = new AuctionValidator(repository);
+        AuctionHandler handler = new AuctionHandler(repository, validator);
+
+        Router router = Router.router(vertx);
+        router.route().handler(BodyHandler.create());
+
+        router.route().produces("application/json");
+        router.route().consumes("application/json");
+
+        router.route("/auctions/:id").handler(handler::initAuctionInSharedData);
+        router.get("/auctions/:id").handler(handler::handleGetAuction);
+        router.patch("/auctions/:id").handler(handler::handleChangeAuctionPrice);
+
+        return router;
+    }
+
+    private ErrorHandler errorHandler() {
+        return ErrorHandler.create(true);
+    }
+
+    private StaticHandler staticHandler() {
+        return StaticHandler.create()
+                .setCachingEnabled(false);
     }
 
 }

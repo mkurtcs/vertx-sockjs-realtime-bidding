@@ -1,0 +1,6 @@
+io/vertx/sample/AuctionServiceVerticle.class
+io/vertx/sample/AuctionHandler.class
+io/vertx/sample/Auction.class
+io/vertx/sample/AuctionNotFoundException.class
+io/vertx/sample/AuctionValidator.class
+io/vertx/sample/AuctionRepository.class

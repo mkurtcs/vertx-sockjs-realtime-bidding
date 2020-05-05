@@ -1,0 +1,6 @@
+/home/mkurt/vertx/vertx-sockjs/src/main/java/io/vertx/sample/AuctionRepository.java
+/home/mkurt/vertx/vertx-sockjs/src/main/java/io/vertx/sample/Auction.java
+/home/mkurt/vertx/vertx-sockjs/src/main/java/io/vertx/sample/AuctionHandler.java
+/home/mkurt/vertx/vertx-sockjs/src/main/java/io/vertx/sample/AuctionValidator.java
+/home/mkurt/vertx/vertx-sockjs/src/main/java/io/vertx/sample/AuctionNotFoundException.java
+/home/mkurt/vertx/vertx-sockjs/src/main/java/io/vertx/sample/AuctionServiceVerticle.java
