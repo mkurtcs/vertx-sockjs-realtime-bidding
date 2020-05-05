@@ -37,6 +37,16 @@
             <artifactId>vertx-web</artifactId>
             <version>3.9.0</version>
         </dependency>
+        <dependency>
+            <groupId>io.vertx</groupId>
+            <artifactId>vertx-web</artifactId>
+            <version>3.4.0</version>
+        </dependency>
+        <dependency>
+            <groupId>io.vertx</groupId>
+            <artifactId>vertx-bridge-common</artifactId>
+            <version>3.9.0</version>
+        </dependency>
     </dependencies>
     <build>
         <plugins>
